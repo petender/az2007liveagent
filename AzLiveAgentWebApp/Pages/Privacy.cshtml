@@ -1,8 +1,77 @@
 ﻿@page
 @model PrivacyModel
 @{
-    ViewData["Title"] = "Privacy Policy";
+        ViewData["Title"] = "Employee Directory";
 }
-<h1>@ViewData["Title"]</h1>
+<h1 style="font-family: 'Segoe UI', Courier, monospace; color: #2d2d2d; font-size: 2.2rem; font-weight: bold; margin-bottom: 24px;">@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<div id="employee-table-container"></div>
+
+<style>
+        #employee-table-container {
+                margin: 0 auto;
+                max-width: 900px;
+                background: #f8f9fa;
+                border-radius: 12px;
+                box-shadow: 0 2px 12px #0001;
+                padding: 32px 24px;
+        }
+        table.employee-table {
+                width: 100%;
+                border-collapse: collapse;
+                font-family: 'Courier New', Courier, monospace;
+                font-size: 1.1rem;
+                background: #fff;
+                border-radius: 8px;
+                overflow: hidden;
+        }
+        .employee-table th, .employee-table td {
+                padding: 12px 16px;
+                border-bottom: 1px solid #e0e0e0;
+                text-align: left;
+        }
+        .employee-table th {
+                background: #b71c1c;
+                color: #fff;
+                font-weight: bold;
+                font-size: 1.05em;
+        }
+        .employee-table tr:last-child td {
+                border-bottom: none;
+        }
+        .employee-table tr:hover {
+                background: #ffeaea;
+        }
+</style>
+
+<script>
+fetch('/sampledata.json')
+    .then(res => res.json())
+    .then(data => {
+        const table = document.createElement('table');
+        table.className = 'employee-table';
+        table.innerHTML = `
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Hiring Date</th>
+                    <th>Department</th>
+                    <th>Job Title</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${data.map(emp => `
+                    <tr>
+                        <td>${emp.FirstName}</td>
+                        <td>${emp.LastName}</td>
+                        <td>${emp.HiringDate}</td>
+                        <td>${emp.Department}</td>
+                        <td>${emp["Job Title"]}</td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        `;
+        document.getElementById('employee-table-container').appendChild(table);
+    });
+</script>
